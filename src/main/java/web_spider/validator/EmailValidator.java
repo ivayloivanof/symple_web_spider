@@ -11,12 +11,14 @@ public class EmailValidator {
 	public static HashSet<String> parse(Document document) {
 		
 		HashSet<String> emails = new HashSet<String>();
-		
-		Pattern p = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+");
-        Matcher matcher = p.matcher(document.text());
-        while (matcher.find()) {
-            emails.add(matcher.group());
-        }
+		if (document != null) {
+			Pattern p = Pattern.compile("[a-zA-Z0-9_!#$%&'*+\\/=?`{|}~^.-]+@[a-zA-Z0-9.-]+");
+			String text = document.text();
+	        Matcher matcher = p.matcher(text);
+	        while (matcher.find()) {
+	            emails.add(matcher.group());
+	        }
+		}
 		
 		return emails;
 	}
