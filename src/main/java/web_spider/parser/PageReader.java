@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import web_spider.validator.EmailValidator;
 import web_spider.validator.UrlValidator;
 
 public class PageReader {
@@ -19,6 +20,7 @@ public class PageReader {
 	private Document page;
 	private Elements links;
 	private HashSet<String> pageLinks;
+	private HashSet<String> pageEmails;
 	
 	public String getUrl() {
 		return this.url;
@@ -52,11 +54,20 @@ public class PageReader {
 		this.pageLinks = pageLinks;
 	}
 
+	public HashSet<String> getPageEmails() {
+		return this.pageEmails;
+	}
+
+	private void setPageEmails(HashSet<String> pageEmails) {
+		this.pageEmails = pageEmails;
+	}
+
 	public PageReader(String url) {
 		this.setUrl(url);
 		this.setPage(this.read(this.url));
 		this.setLinks(this.extractLinks(this.getPage()));
 		this.setPageLinks(this.readAllLinks());
+		this.setPageEmails(this.readAllEmails());
 	}
 
 	private Document read(String url) {
@@ -85,11 +96,12 @@ public class PageReader {
 			if (UrlValidator.isValid(url)) {
 				result.add(url);
 			}
-			
-            System.out.println("link : " + link.attr("abs:href"));
-            System.out.println("text : " + link.text());
         }
 		
 		return result;
+	}
+	
+	private HashSet<String> readAllEmails() {
+        return EmailValidator.parse(this.page);
 	}
 }
