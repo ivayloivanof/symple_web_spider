@@ -86,7 +86,18 @@ public class PageReader {
 	}
 	
 	private Elements extractLinks(Document document) {
-        return document.select("a[href]");
+		try {
+
+			Elements e = document.select("a[href]");
+			if(!e.isEmpty()) {
+				return e;
+			}
+			
+		} catch (Exception e) {
+			LOG.info(e.getMessage());
+		}
+		
+        return new Elements();
 	}
 	
 	private HashSet<String> readAllLinks() {
